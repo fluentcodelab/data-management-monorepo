@@ -1,0 +1,14 @@
+{
+  "name": "demoapp",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "Gabin Dongmo <gdongmo@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "start": "concurrently \"cd Backend/Api && dotnet run \" \"cd frontend && yarn dev\"",
+    "start:watch": "concurrently \"cd Backend/Api && dotnet watch run \" \"cd frontend && yarn dev\""
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}
