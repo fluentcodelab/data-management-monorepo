@@ -12,6 +12,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataManagement.Domain", "Da
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DataManagement", "DataManagement", "{9596CCC4-0EF8-437B-A22F-72278EAAE8EF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataManagement.Domain.UnitTests", "DataManagement.Domain.UnitTests\DataManagement.Domain.UnitTests.csproj", "{E0427844-5F8D-4EDD-881F-F435CD986413}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
