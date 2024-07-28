@@ -13,19 +13,26 @@ public class Advisor : Entity<int>
         HealthStatus = GenerateRandomHealthStatus();
     }
 
-    public FullName FullName { get; }
+    public FullName FullName { get; private set; }
     public SIN SIN { get; }
-    public Address Address { get; }
-    public Phone Phone { get; }
+    public Address Address { get; private set; }
+    public Phone Phone { get; private set; }
     public HealthStatus HealthStatus { get; }
 
-    public static Result<Advisor, Error> Create(Maybe<FullName> maybeFullName, Maybe<SIN> maybeSin,
+    public static Advisor Create(Maybe<FullName> maybeFullName, Maybe<SIN> maybeSin,
         Maybe<Address> maybeAddress, Maybe<Phone> maybePhone)
     {
         var fullName = maybeFullName.GetValueOrThrow(new ArgumentNullException());
         var sin = maybeSin.GetValueOrThrow(new ArgumentNullException());
 
         return new Advisor(fullName, sin, maybeAddress, maybePhone);
+    }
+
+    public void Update(Maybe<FullName> maybeFullName, Maybe<Address> maybeAddress, Maybe<Phone> maybePhone)
+    {
+        if (maybeFullName.HasValue) FullName = maybeFullName.Value;
+        if (maybeAddress.HasValue) Address = maybeAddress.Value;
+        if (maybePhone.HasValue) Phone = maybePhone.Value;
     }
 
     private static HealthStatus GenerateRandomHealthStatus()
