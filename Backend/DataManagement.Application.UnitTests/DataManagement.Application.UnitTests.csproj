@@ -20,7 +20,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\DataManagement.Application\DataManagement.Application.csproj" />
-      <ProjectReference Include="..\DataManagement.Domain.UnitTests\DataManagement.Domain.UnitTests.csproj" />
+        <ProjectReference Include="..\DataManagement.Application\DataManagement.Application.csproj"/>
+        <ProjectReference Include="..\DataManagement.Domain.UnitTests\DataManagement.Domain.UnitTests.csproj"/>
     </ItemGroup>
 </Project>

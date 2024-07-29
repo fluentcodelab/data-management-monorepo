@@ -6,11 +6,11 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="8.0.7" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="8.0.7"/>
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\DataManagement.Application\DataManagement.Application.csproj" />
+        <ProjectReference Include="..\DataManagement.Application\DataManagement.Application.csproj"/>
     </ItemGroup>
 
 </Project>

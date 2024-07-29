@@ -1,0 +1,18 @@
+<ArchitectureGraph>
+  <Module Identifier="3B45F07B-2FCA-4155-8CFF-87A81C6F611A" Name="DataManagement.Domain" />
+  <Module Identifier="C56D13AF-01BA-4AC7-831E-2778C1C08A75" Name="DataManagement.Application" />
+  <Module Identifier="77E29E6B-2A15-4990-A6F4-866A7EC703A2" Name="DataManagement.Infrastructure" />
+  <Module Identifier="C21C521C-0FE2-4909-9154-C8CFB835BA31" Name="Api" />
+  <Module Identifier="E0427844-5F8D-4EDD-881F-F435CD986413" Name="DataManagement.Domain.UnitTests" />
+  <Module Identifier="64A79E48-A0AF-46E5-B959-03AC680E3501" Name="DataManagement.Application.UnitTests" />
+  <Reference Identifier="C56D13AF-01BA-4AC7-831E-2778C1C08A75/r:DataManagement.Domain" SourceId="C56D13AF-01BA-4AC7-831E-2778C1C08A75" Name="DataManagement.Domain" TargetId="3B45F07B-2FCA-4155-8CFF-87A81C6F611A" />
+  <Reference Identifier="77E29E6B-2A15-4990-A6F4-866A7EC703A2/r:DataManagement.Application" SourceId="77E29E6B-2A15-4990-A6F4-866A7EC703A2" Name="DataManagement.Application" TargetId="C56D13AF-01BA-4AC7-831E-2778C1C08A75" />
+  <Reference Identifier="77E29E6B-2A15-4990-A6F4-866A7EC703A2/r:DataManagement.Domain" SourceId="77E29E6B-2A15-4990-A6F4-866A7EC703A2" Name="DataManagement.Domain" TargetId="3B45F07B-2FCA-4155-8CFF-87A81C6F611A" />
+  <Reference Identifier="C21C521C-0FE2-4909-9154-C8CFB835BA31/r:DataManagement.Infrastructure" SourceId="C21C521C-0FE2-4909-9154-C8CFB835BA31" Name="DataManagement.Infrastructure" TargetId="77E29E6B-2A15-4990-A6F4-866A7EC703A2" />
+  <Reference Identifier="C21C521C-0FE2-4909-9154-C8CFB835BA31/r:DataManagement.Application" SourceId="C21C521C-0FE2-4909-9154-C8CFB835BA31" Name="DataManagement.Application" TargetId="C56D13AF-01BA-4AC7-831E-2778C1C08A75" />
+  <Reference Identifier="C21C521C-0FE2-4909-9154-C8CFB835BA31/r:DataManagement.Domain" SourceId="C21C521C-0FE2-4909-9154-C8CFB835BA31" Name="DataManagement.Domain" TargetId="3B45F07B-2FCA-4155-8CFF-87A81C6F611A" />
+  <Reference Identifier="E0427844-5F8D-4EDD-881F-F435CD986413/r:DataManagement.Domain" SourceId="E0427844-5F8D-4EDD-881F-F435CD986413" Name="DataManagement.Domain" TargetId="3B45F07B-2FCA-4155-8CFF-87A81C6F611A" />
+  <Reference Identifier="64A79E48-A0AF-46E5-B959-03AC680E3501/r:DataManagement.Application" SourceId="64A79E48-A0AF-46E5-B959-03AC680E3501" Name="DataManagement.Application" TargetId="C56D13AF-01BA-4AC7-831E-2778C1C08A75" />
+  <Reference Identifier="64A79E48-A0AF-46E5-B959-03AC680E3501/r:DataManagement.Domain.UnitTests" SourceId="64A79E48-A0AF-46E5-B959-03AC680E3501" Name="DataManagement.Domain.UnitTests" TargetId="E0427844-5F8D-4EDD-881F-F435CD986413" />
+  <Reference Identifier="64A79E48-A0AF-46E5-B959-03AC680E3501/r:DataManagement.Domain" SourceId="64A79E48-A0AF-46E5-B959-03AC680E3501" Name="DataManagement.Domain" TargetId="3B45F07B-2FCA-4155-8CFF-87A81C6F611A" />
+</ArchitectureGraph>
