@@ -13,6 +13,10 @@ public class Advisor : Entity<int>
         HealthStatus = GenerateRandomHealthStatus();
     }
 
+    protected Advisor()
+    {
+    }
+
     public FullName FullName { get; private set; }
     public SIN SIN { get; }
     public Address Address { get; private set; }

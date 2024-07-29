@@ -6,7 +6,7 @@ namespace DataManagement.Infrastructure;
 
 public static class InfrastructureServicesRegistration
 {
-    public static void AddDataManagementModule(this IServiceCollection services)
+    public static void AddDataManagement(this IServiceCollection services)
     {
         services.AddApplicationServices();
         services.AddDbContext<DataManagementDbContext>();

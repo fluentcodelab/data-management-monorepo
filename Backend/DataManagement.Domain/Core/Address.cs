@@ -4,6 +4,15 @@ namespace DataManagement.Domain.Core;
 
 public class Address : ValueObject
 {
+    protected Address()
+    {
+    }
+
+    private Address(string value)
+    {
+        Value = value;
+    }
+
     public string Value { get; }
 
     protected override IEnumerable<IComparable> GetEqualityComponents()
@@ -18,11 +27,6 @@ public class Address : ValueObject
             return error;
 
         return new Address(address);
-    }
-
-    private Address(string value)
-    {
-        Value = value;
     }
 
     private static Result<string, Error> ValidateBusinessRules(Maybe<string> address)

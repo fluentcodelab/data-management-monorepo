@@ -22,7 +22,7 @@ public class AdvisorService(IAdvisorRepository repository) : IAdvisorService
         return maybeAdvisor.Value.ToDto();
     }
 
-    public async Task<Result<AdvisorDto, List<Error>>> AddAsync(AdvisorCreationOrUpdateDto dto)
+    public async Task<Result<AdvisorDto, List<Error>>> AddAsync(AdvisorCreationDto dto)
     {
         var validation = ValidateCreationPayload(dto);
         if (validation.Errors.Count > 0) return validation.Errors;
@@ -43,9 +43,8 @@ public class AdvisorService(IAdvisorRepository repository) : IAdvisorService
         return advisor.ToDto();
     }
 
-    public async Task<UnitResult<List<Error>>> UpdateAsync(AdvisorCreationOrUpdateDto dto)
+    public async Task<UnitResult<List<Error>>> UpdateAsync(int id, AdvisorUpdateDto dto)
     {
-        var id = dto.Id.Value;
         var maybeAdvisor = await repository.GetAsync(id);
         if (maybeAdvisor.HasNoValue) return new List<Error> { DomainErrors.NotFound(id) };
 
@@ -82,17 +81,17 @@ public class AdvisorService(IAdvisorRepository repository) : IAdvisorService
         return UnitResult.Success<Error>();
     }
 
-    private static AdvisorValidationDto ValidateCreationPayload(AdvisorCreationOrUpdateDto dto)
+    private static AdvisorValidationDto ValidateCreationPayload(AdvisorCreationDto dto)
     {
         return ValidatePayload(dto);
     }
 
-    private static AdvisorValidationDto ValidateUpdatePayload(AdvisorCreationOrUpdateDto dto)
+    private static AdvisorValidationDto ValidateUpdatePayload(AdvisorUpdateDto dto)
     {
         return ValidatePayload(dto, false);
     }
 
-    private static AdvisorValidationDto ValidatePayload(AdvisorCreationOrUpdateDto dto, bool isCreation = true)
+    private static AdvisorValidationDto ValidatePayload(CommonAdvisorDto dto, bool isCreation = true)
     {
         var validationDto = new AdvisorValidationDto();
 
@@ -102,7 +101,8 @@ public class AdvisorService(IAdvisorRepository repository) : IAdvisorService
 
         if (isCreation)
         {
-            var (_, sinFailure, sin, sinError) = SIN.Create(dto.SIN);
+            dto = (AdvisorCreationDto)dto;
+            var (_, sinFailure, sin, sinError) = SIN.Create(((AdvisorCreationDto)dto).SIN);
             if (sinFailure) validationDto.Errors.Add(sinError);
             else validationDto.SIN = sin;
         }

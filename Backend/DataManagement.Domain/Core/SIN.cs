@@ -9,6 +9,10 @@ public class SIN : ValueObject
         Number = number;
     }
 
+    protected SIN()
+    {
+    }
+
     public string Number { get; }
 
     protected override IEnumerable<IComparable> GetEqualityComponents()

@@ -1,3 +1,7 @@
+using DataManagement.Infrastructure;
+using Microsoft.OpenApi.Models;
+using Swashbuckle.AspNetCore.SwaggerUI;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -5,7 +9,14 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1", new OpenApiInfo { Title = "Data Management API", Version = "v1" });
+    c.OrderActionsBy(apiDescription => $"{apiDescription.GroupName}");
+});
+builder.Services.Configure<RouteOptions>(options => options.LowercaseUrls = true);
+
+builder.Services.AddDataManagement();
 
 var app = builder.Build();
 
@@ -13,7 +24,12 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
-    app.UseSwaggerUI();
+    app.UseSwaggerUI(options =>
+    {
+        options.DefaultModelsExpandDepth(0);
+        options.DocExpansion(DocExpansion.List);
+        options.SwaggerEndpoint("/swagger/v1/swagger.json", "Data Management API v1");
+    });
 }
 
 app.UseHttpsRedirection();

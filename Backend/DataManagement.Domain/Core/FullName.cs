@@ -10,6 +10,10 @@ public class FullName : ValueObject
         LastName = lastName;
     }
 
+    protected FullName()
+    {
+    }
+
     public string FirstName { get; }
     public string LastName { get; }
 

@@ -9,6 +9,10 @@ public class Phone : ValueObject
         Number = number;
     }
 
+    protected Phone()
+    {
+    }
+
     public string Number { get; }
 
     protected override IEnumerable<IComparable> GetEqualityComponents()

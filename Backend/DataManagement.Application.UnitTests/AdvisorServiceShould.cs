@@ -17,8 +17,8 @@ namespace DataManagement.Application.UnitTests;
 
 public class AdvisorServiceShould
 {
-    private readonly AdvisorService _sut;
     private readonly Mock<IAdvisorRepository> _mockAdvisoryRepo;
+    private readonly AdvisorService _sut;
 
     public AdvisorServiceShould()
     {
@@ -69,7 +69,7 @@ public class AdvisorServiceShould
     [Fact(DisplayName = "Return an error when adding an advisor, if creation payload not valid")]
     public async Task Fail_OnAdd_InvalidPayload()
     {
-        var result = await _sut.AddAsync(new AdvisorCreationOrUpdateDto());
+        var result = await _sut.AddAsync(new AdvisorCreationDto());
 
         result.IsFailure.ShouldBeTrue();
         result.Error.Count.ShouldBeGreaterThan(0);
@@ -81,9 +81,8 @@ public class AdvisorServiceShould
         _mockAdvisoryRepo
             .Setup(x => x.GetAsync(It.IsAny<Expression<Func<Advisor, bool>>>()))
             .ReturnsAsync([new AdvisorBuilder().WithDefaultData().Build().Value]);
-        var dto = new AdvisorCreationOrUpdateDtoBuilder()
+        var dto = new AdvisorCreationDtoBuilder()
             .WithDefaultData()
-            .WithId(Maybe<int>.None)
             .Build();
 
         var result = await _sut.AddAsync(dto);
@@ -98,9 +97,8 @@ public class AdvisorServiceShould
         _mockAdvisoryRepo
             .Setup(x => x.GetAsync(It.IsAny<Expression<Func<Advisor, bool>>>()))
             .ReturnsAsync([]);
-        var dto = new AdvisorCreationOrUpdateDtoBuilder()
+        var dto = new AdvisorCreationDtoBuilder()
             .WithDefaultData()
-            .WithId(Maybe<int>.None)
             .Build();
 
         var result = await _sut.AddAsync(dto);
@@ -116,14 +114,13 @@ public class AdvisorServiceShould
     public async Task Fail_OnUpdate_NotFound()
     {
         const int id = 1;
-        var dto = new AdvisorCreationOrUpdateDtoBuilder()
-            .WithId(id)
+        var dto = new AdvisorUpdateDtoBuilder()
             .Build();
         _mockAdvisoryRepo
             .Setup(x => x.GetAsync(id))
             .ReturnsAsync(Maybe<Advisor>.None);
 
-        var result = await _sut.UpdateAsync(dto);
+        var result = await _sut.UpdateAsync(id, dto);
 
         result.IsFailure.ShouldBeTrue();
         result.Error.First().ShouldBeEquivalentTo(DomainErrors.NotFound(id));
@@ -133,14 +130,13 @@ public class AdvisorServiceShould
     public async Task Fail_OnUpdate_InvalidPayload()
     {
         const int id = 1;
-        var dto = new AdvisorCreationOrUpdateDtoBuilder()
-            .WithId(id)
+        var dto = new AdvisorUpdateDtoBuilder()
             .Build();
         _mockAdvisoryRepo
             .Setup(x => x.GetAsync(id))
             .ReturnsAsync(new AdvisorBuilder().WithDefaultData().Build().Value);
 
-        var result = await _sut.UpdateAsync(dto);
+        var result = await _sut.UpdateAsync(id, dto);
 
         result.IsFailure.ShouldBeTrue();
         result.Error.Count.ShouldBeGreaterThan(0);
@@ -150,9 +146,8 @@ public class AdvisorServiceShould
     public async Task Fail_OnUpdate_DuplicateInfoOrSIN()
     {
         const int id = 1;
-        var dto = new AdvisorCreationOrUpdateDtoBuilder()
+        var dto = new AdvisorUpdateDtoBuilder()
             .WithDefaultData()
-            .WithId(id)
             .Build();
         _mockAdvisoryRepo
             .Setup(x => x.GetAsync(id))
@@ -161,7 +156,7 @@ public class AdvisorServiceShould
             .Setup(x => x.GetAsync(It.IsAny<Expression<Func<Advisor, bool>>>()))
             .ReturnsAsync([new AdvisorBuilder().WithDefaultData().Build().Value]);
 
-        var result = await _sut.UpdateAsync(dto);
+        var result = await _sut.UpdateAsync(id, dto);
 
         result.IsFailure.ShouldBeTrue();
         result.Error.First().ShouldBeEquivalentTo(DomainErrors.AlreadyExists());
@@ -171,9 +166,8 @@ public class AdvisorServiceShould
     public async Task Succeed_OnUpdate_ValidDataAndNoDuplication()
     {
         const int id = 1;
-        var dto = new AdvisorCreationOrUpdateDtoBuilder()
+        var dto = new AdvisorUpdateDtoBuilder()
             .WithDefaultData()
-            .WithId(id)
             .Build();
         _mockAdvisoryRepo
             .Setup(x => x.GetAsync(id))
@@ -182,7 +176,7 @@ public class AdvisorServiceShould
             .Setup(x => x.GetAsync(It.IsAny<Expression<Func<Advisor, bool>>>()))
             .ReturnsAsync([]);
 
-        var result = await _sut.UpdateAsync(dto);
+        var result = await _sut.UpdateAsync(id, dto);
 
         result.IsSuccess.ShouldBeTrue();
         _mockAdvisoryRepo.Verify(x => x.Update(It.IsAny<Advisor>()), Times.Once);

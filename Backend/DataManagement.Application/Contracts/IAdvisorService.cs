@@ -8,7 +8,7 @@ public interface IAdvisorService
 {
     Task<List<AdvisorDto>> GetAsync();
     Task<Result<AdvisorDto, Error>> GetAsync(int id);
-    Task<Result<AdvisorDto, List<Error>>> AddAsync(AdvisorCreationOrUpdateDto dto);
-    Task<UnitResult<List<Error>>> UpdateAsync(AdvisorCreationOrUpdateDto dto);
+    Task<Result<AdvisorDto, List<Error>>> AddAsync(AdvisorCreationDto dto);
+    Task<UnitResult<List<Error>>> UpdateAsync(int id, AdvisorUpdateDto dto);
     Task<UnitResult<Error>> DeleteAsync(int id);
 }
