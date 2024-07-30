@@ -7,17 +7,33 @@ using DataManagement.Domain.Core;
 
 namespace DataManagement.Application.Services;
 
-public class AdvisorService(IAdvisorRepository repository) : IAdvisorService
+public class AdvisorService(IAdvisorRepository repository, ICacheService cacheService) : IAdvisorService
 {
+    private const string CacheKey = "AllAdvisors";
+
     public async Task<List<AdvisorDto>> GetAsync()
     {
+        var cachedList = cacheService.Get<List<Advisor>>(CacheKey);
+        if (cachedList.HasValue) return cachedList.Value.ToDto();
+
         var list = await repository.GetAsync();
+        cacheService.Put(CacheKey, list);
+
         return list.ToDto();
     }
 
     public async Task<Result<AdvisorDto, Error>> GetAsync(int id)
     {
-        var maybeAdvisor = await repository.GetAsync(id);
+        Maybe<Advisor> maybeAdvisor;
+
+        var cachedList = cacheService.Get<List<Advisor>>(CacheKey);
+        if (cachedList.HasValue)
+        {
+            maybeAdvisor = cachedList.Value.FirstOrDefault(x => x.Id == id);
+            return maybeAdvisor.HasValue ? maybeAdvisor.Value.ToDto() : DomainErrors.NotFound(id);
+        }
+
+        maybeAdvisor = await repository.GetAsync(id);
         if (maybeAdvisor.HasNoValue) return DomainErrors.NotFound(id);
         return maybeAdvisor.Value.ToDto();
     }
@@ -39,6 +55,8 @@ public class AdvisorService(IAdvisorRepository repository) : IAdvisorService
 
         await repository.AddAsync(advisor);
         await repository.SaveAsync();
+
+        cacheService.Delete<List<Advisor>>(CacheKey);
 
         return advisor.ToDto();
     }
@@ -65,6 +83,8 @@ public class AdvisorService(IAdvisorRepository repository) : IAdvisorService
         repository.Update(advisor);
         await repository.SaveAsync();
 
+        cacheService.Delete<List<Advisor>>(CacheKey);
+
         return UnitResult.Success<List<Error>>();
     }
 
@@ -77,6 +97,8 @@ public class AdvisorService(IAdvisorRepository repository) : IAdvisorService
 
         repository.Delete(advisor);
         await repository.SaveAsync();
+
+        cacheService.Delete<List<Advisor>>(CacheKey);
 
         return UnitResult.Success<Error>();
     }

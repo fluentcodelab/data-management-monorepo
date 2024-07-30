@@ -1,5 +1,6 @@
 using DataManagement.Application;
 using DataManagement.Application.Contracts;
+using DataManagement.Infrastructure.Caching;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace DataManagement.Infrastructure;
@@ -11,5 +12,6 @@ public static class InfrastructureServicesRegistration
         services.AddApplicationServices();
         services.AddDbContext<DataManagementDbContext>();
         services.AddScoped<IAdvisorRepository, AdvisorRepository>();
+        services.AddSingleton<ICacheService, MRUCacheService>();
     }
 }
