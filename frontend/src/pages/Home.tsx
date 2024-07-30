@@ -10,7 +10,6 @@ const initialAdvisors = [
     id: 1,
     firstName: "John",
     lastName: "Doe",
-    email: "john@example.com",
     sin: "123-456-789",
     address: "123 Main St, City, Country",
     phone: "123-456-7890",
@@ -20,7 +19,6 @@ const initialAdvisors = [
     id: 2,
     firstName: "Jane",
     lastName: "Smith",
-    email: "jane@example.com",
     sin: "987-654-321",
     address: "456 Elm St, City, Country",
     phone: "098-765-4321",
@@ -30,7 +28,6 @@ const initialAdvisors = [
     id: 3,
     firstName: "Alice",
     lastName: "Johnson",
-    email: "alice@example.com",
     sin: "555-666-777",
     address: "789 Oak St, City, Country",
     phone: "555-666-7777",
@@ -90,7 +87,6 @@ const Home: React.FC = () => {
         <thead>
           <tr>
             <th>Name</th>
-            <th>Email</th>
             <th>SIN</th>
             <th>Address</th>
             <th>Phone</th>
@@ -102,7 +98,6 @@ const Home: React.FC = () => {
           {advisors.map((advisor) => (
             <tr key={advisor.id}>
               <td>{advisor.lastName}, {advisor.firstName}</td>
-              <td>{advisor.email}</td>
               <td>{advisor.sin}</td>
               <td>{advisor.address}</td>
               <td>{advisor.phone}</td>
