@@ -45,7 +45,7 @@ public class AdvisorsController(IAdvisorService service) : ControllerBase
 
     [HttpPut("{id:int}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
-    [ProducesResponseType(typeof(Error), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(IEnumerable<Error>), StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> Update(int id, [FromBody] AdvisorUpdateDto payload)
     {
         var result = await service.UpdateAsync(id, payload);

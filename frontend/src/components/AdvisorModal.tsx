@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Button, Form, Modal } from "react-bootstrap";
-import { Advisor, HealthStatus } from "../models";
+import { Advisor } from "../models";
 import { z } from "zod";
 
 const advisorSchema = z.object({
@@ -31,7 +31,6 @@ const advisorSchema = z.object({
     )
     .optional()
     .or(z.literal("")),
-  healthStatus: z.enum(["Green", "Yellow", "Red"]),
 });
 
 type FormData = z.infer<typeof advisorSchema>;
@@ -49,7 +48,6 @@ const newAdvisor: FormData = {
   sin: "",
   address: "",
   phone: "",
-  healthStatus: HealthStatus.Green,
 };
 
 const AdvisorModal: React.FC<AddAdvisorModalProps> = ({
@@ -96,6 +94,7 @@ const AdvisorModal: React.FC<AddAdvisorModalProps> = ({
     if (result.success) {
       handleSave(advisor as Advisor);
       handleClose();
+      setAdvisor(newAdvisor)
     } else {
       setErrors(result.error.issues);
     }
