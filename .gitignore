@@ -4,10 +4,3 @@ obj/
 node_modules
 *.user
 .DS_Store
-frontend/src/api/.openapi-generator
-frontend/src/api/apis
-frontend/src/api/models
-frontend/src/api/.openapi-generator-ignore
-frontend/src/api/index.ts
-frontend/src/api/runtime.ts
-frontend/.env

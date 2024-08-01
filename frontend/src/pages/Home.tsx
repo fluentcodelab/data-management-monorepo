@@ -2,42 +2,73 @@ import React, { useState } from "react";
 import { Button, Table } from "react-bootstrap";
 import { PencilSquare, Trash } from "react-bootstrap-icons";
 import AdvisorModal from "../components/AdvisorModal.tsx";
-import { useAdvisors } from "../hooks/useAdvisors.ts";
-import { AdvisorDto } from "../api";
+import { Advisor, HealthStatus } from "../models";
+import ConfirmDeleteModal from "../components/ConfirmDeleteModal.tsx";
+
+const initialAdvisors = [
+  {
+    id: 1,
+    firstName: "John",
+    lastName: "Doe",
+    sin: "123-456-789",
+    address: "123 Main St, City, Country",
+    phone: "123-456-7890",
+    healthStatus: HealthStatus.Green,
+  },
+  {
+    id: 2,
+    firstName: "Jane",
+    lastName: "Smith",
+    sin: "987-654-321",
+    address: "456 Elm St, City, Country",
+    phone: "098-765-4321",
+    healthStatus: HealthStatus.Yellow,
+  },
+  {
+    id: 3,
+    firstName: "Alice",
+    lastName: "Johnson",
+    sin: "555-666-777",
+    address: "789 Oak St, City, Country",
+    phone: "555-666-7777",
+    healthStatus: HealthStatus.Red,
+  },
+];
 
 const Home: React.FC = () => {
-  const {
-    advisors,
-    isLoading,
-    addAdvisor,
-    updateAdvisor,
-    deleteAdvisor,
-  } = useAdvisors();
-
+  const [advisors, setAdvisors] = useState<Advisor[]>(initialAdvisors);
   const [showModal, setShowModal] = useState(false);
-  const [selectedAdvisor, setSelectedAdvisor] = useState<AdvisorDto | null>(
-    null,
-  );
-  // const [showDeleteModal, setShowDeleteModal] = useState(false);
-  // const [advisorToDelete, setAdvisorToDelete] = useState(null);
+  const [advisorToEdit, setAdvisorToEdit] = useState<Advisor | null>(null);
+  const [showConfirmDeleteModal, setShowConfirmDeleteModal] = useState(false);
+  const [advisorToDelete, setAdvisorToDelete] = useState<Advisor | null>(null);
 
-  const handleSave = (advisor: AdvisorDto) => {
-    if (selectedAdvisor) {
-      updateAdvisor.mutate(advisor);
+  const handleSave = (advisor: Advisor) => {
+    if (advisor.id) {
+      setAdvisors(advisors.map((a) => (a.id === advisor.id ? advisor : a)));
     } else {
-      addAdvisor.mutate(advisor);
+      const newId = advisors.length
+        ? Math.max(...advisors.map((a) => a.id!)) + 1
+        : 1;
+      setAdvisors([...advisors, { id: newId, ...advisor }]);
     }
-    // setShowModal(false);
-    // setSelectedAdvisor(null);
+  };
+  const handleEdit = (advisor: Advisor) => {
+    setAdvisorToEdit(advisor);
+    setShowModal(true);
   };
 
-  // const handleDelete = () => {
-  //   if (advisorToDelete) {
-  //     deleteAdvisor.mutate(advisorToDelete.id);
-  //     setShowDeleteModal(false);
-  //     setAdvisorToDelete(null);
-  //   }
-  // };
+  const handleDelete = () => {
+    if (advisorToDelete) {
+      setAdvisors(advisors.filter((a) => a.id !== advisorToDelete.id));
+      setAdvisorToDelete(null);
+    }
+    setShowConfirmDeleteModal(false);
+  };
+
+  const confirmDelete = (advisor: Advisor) => {
+    setAdvisorToDelete(advisor);
+    setShowConfirmDeleteModal(true);
+  };
 
   return (
     <div>
@@ -45,14 +76,13 @@ const Home: React.FC = () => {
       <Button
         variant="primary"
         onClick={() => {
-          // setAdvisorToEdit(null);
+          setAdvisorToEdit(null);
           setShowModal(true);
         }}
         className="mb-4"
       >
         Add Advisor
       </Button>
-      {isLoading && <p>Loading...</p>}
       <Table striped bordered hover>
         <thead>
           <tr>
@@ -67,23 +97,18 @@ const Home: React.FC = () => {
         <tbody>
           {advisors.map((advisor) => (
             <tr key={advisor.id}>
-              <td>
-                {advisor.lastName}, {advisor.firstName}
-              </td>
+              <td>{advisor.lastName}, {advisor.firstName}</td>
               <td>{advisor.sin}</td>
               <td>{advisor.address}</td>
               <td>{advisor.phone}</td>
-              <td style={{ color: advisor.healthStatus!.toLowerCase() }}>
+              <td style={{ color: advisor.healthStatus.toLowerCase() }}>
                 {advisor.healthStatus}
               </td>
               <td>
                 <Button
                   variant="outline-primary"
                   size="sm"
-                  onClick={() => {
-                    setSelectedAdvisor(advisor);
-                    setShowModal(true);
-                  }}
+                  onClick={() => handleEdit(advisor)}
                   className="me-2"
                 >
                   <PencilSquare />
@@ -91,7 +116,7 @@ const Home: React.FC = () => {
                 <Button
                   variant="outline-danger"
                   size="sm"
-                  onClick={() => deleteAdvisor.mutate(advisor.id!.toString())}
+                  onClick={() => confirmDelete(advisor)}
                 >
                   <Trash />
                 </Button>
@@ -103,23 +128,17 @@ const Home: React.FC = () => {
 
       <AdvisorModal
         show={showModal}
-        handleClose={() => {
-          setShowModal(false);
-          setSelectedAdvisor(null);
-        }}
+        handleClose={() => setShowModal(false)}
         handleSave={handleSave}
+        advisorToEdit={advisorToEdit}
       />
 
-      {/*<ConfirmDeleteModal*/}
-      {/*  show={showConfirmDeleteModal}*/}
-      {/*  handleClose={() => setShowConfirmDeleteModal(false)}*/}
-      {/*  handleConfirm={handleDelete}*/}
-      {/*  advisorName={*/}
-      {/*    advisorToDelete*/}
-      {/*      ? `${advisorToDelete.firstName} ${advisorToDelete.lastName}`*/}
-      {/*      : ""*/}
-      {/*  }*/}
-      {/*/>*/}
+      <ConfirmDeleteModal
+        show={showConfirmDeleteModal}
+        handleClose={() => setShowConfirmDeleteModal(false)}
+        handleConfirm={handleDelete}
+        advisorName={advisorToDelete ? `${advisorToDelete.firstName} ${advisorToDelete.lastName}` : ""}
+      />
     </div>
   );
 };
